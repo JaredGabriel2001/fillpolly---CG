@@ -28,38 +28,20 @@ var Shape = /** @class */ (function () {
 var currentPoints = []; // Pontos da forma atual
 var shapes = []; // Lista de formas criadas
 var selectedShapeIndex = null; // Índice da forma selecionada
-var fillColor = "#0000ff"; // Cor de preenchimento padrão
-var borderColor = "#FFFF00"; // Cor da borda padrão
+var defaultBorderColor = "#FFFF00"; // Cor da borda padrão
 // Seleciona elementos HTML
 var canvas = document.getElementById("drawingCanvas");
 var context = canvas.getContext("2d");
-var fillColorInput = document.getElementById("fillColor");
-var borderColorInput = document.getElementById("borderColor");
 var clearButton = document.getElementById("clearButton");
 var endShapeButton = document.getElementById("endShapeButton");
 var shapeList = document.getElementById("shapeList");
-// Atualiza a cor de preenchimento e borda com base na seleção do usuário
-fillColorInput.addEventListener("input", function () {
-    if (selectedShapeIndex !== null) {
-        shapes[selectedShapeIndex].fillColor = fillColorInput.value;
-        drawAllShapes();
-    }
-});
-borderColorInput.addEventListener("input", function () {
-    if (selectedShapeIndex !== null) {
-        shapes[selectedShapeIndex].borderColor = borderColorInput.value;
-        drawAllShapes();
-    }
-});
 // Função para desenhar todas as formas
 function drawAllShapes() {
     context.clearRect(0, 0, canvas.width, canvas.height);
-    // Desenha todas as formas
     for (var _i = 0, shapes_1 = shapes; _i < shapes_1.length; _i++) {
         var shape = shapes_1[_i];
         fillPoly(context, shape.vertices, shape.fillColor, shape.borderColor);
     }
-    // Desenha a forma atual (em progresso)
     drawCurrentVertices();
 }
 // Função para desenhar os vértices e linhas da forma atual
@@ -71,15 +53,14 @@ function drawCurrentVertices() {
     for (var i = 1; i < currentPoints.length; i++) {
         context.lineTo(currentPoints[i].x, currentPoints[i].y);
     }
-    context.strokeStyle = borderColor;
+    context.strokeStyle = defaultBorderColor;
     context.lineWidth = 2;
     context.stroke();
-    // Desenha os pontos individuais
     for (var _i = 0, currentPoints_1 = currentPoints; _i < currentPoints_1.length; _i++) {
         var point = currentPoints_1[_i];
         context.beginPath();
         context.arc(point.x, point.y, 3, 0, 2 * Math.PI);
-        context.fillStyle = borderColor;
+        context.fillStyle = defaultBorderColor;
         context.fill();
     }
 }
@@ -89,12 +70,9 @@ function createShape() {
         alert("A forma deve ter pelo menos três pontos.");
         return;
     }
-    // Fecha a forma ligando o último ponto ao primeiro
     currentPoints.push(currentPoints[0]);
-    // Adiciona a nova forma à lista de formas
-    var newShape = new Shape(__spreadArray([], currentPoints, true), fillColor, borderColor);
+    var newShape = new Shape(__spreadArray([], currentPoints, true), "#0000ff", defaultBorderColor);
     shapes.push(newShape);
-    // Limpa os pontos atuais e redesenha tudo
     currentPoints = [];
     updateShapeList();
     drawAllShapes();
@@ -125,10 +103,8 @@ function fillPoly(context, vertices, fillColor, borderColor) {
         console.error("O polígono precisa ter pelo menos três vértices.");
         return;
     }
-    // Define a cor de preenchimento
     context.fillStyle = fillColor;
     context.strokeStyle = borderColor || fillColor;
-    // Desenha o polígono preenchido
     context.beginPath();
     context.moveTo(vertices[0].x, vertices[0].y);
     for (var i = 1; i < vertices.length; i++) {
@@ -143,14 +119,33 @@ function updateShapeList() {
     shapeList.innerHTML = ""; // Limpa a lista atual
     shapes.forEach(function (shape, index) {
         var listItem = document.createElement("li");
-        listItem.textContent = "Forma ".concat(index + 1);
-        // Evento de clique para selecionar a forma
-        listItem.addEventListener("click", function () {
-            selectedShapeIndex = index;
-            fillColorInput.value = shape.fillColor;
-            borderColorInput.value = shape.borderColor;
+        var shapeInfo = document.createElement("span");
+        shapeInfo.textContent = "Forma ".concat(index + 1, ": ");
+        var fillColorInput = document.createElement("input");
+        fillColorInput.type = "color";
+        fillColorInput.value = shape.fillColor;
+        fillColorInput.addEventListener("input", function () {
+            shape.fillColor = fillColorInput.value;
             drawAllShapes();
         });
+        var borderColorInput = document.createElement("input");
+        borderColorInput.type = "color";
+        borderColorInput.value = shape.borderColor;
+        borderColorInput.addEventListener("input", function () {
+            shape.borderColor = borderColorInput.value;
+            drawAllShapes();
+        });
+        var deleteButton = document.createElement("button");
+        deleteButton.textContent = "Excluir";
+        deleteButton.addEventListener("click", function () {
+            shapes.splice(index, 1);
+            updateShapeList();
+            drawAllShapes();
+        });
+        listItem.appendChild(shapeInfo);
+        listItem.appendChild(fillColorInput);
+        listItem.appendChild(borderColorInput);
+        listItem.appendChild(deleteButton);
         shapeList.appendChild(listItem);
     });
 }

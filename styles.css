@@ -2,31 +2,77 @@ body {
     display: flex;
     margin: 0;
     height: 100vh;
+    background-color: aqua;
+    font-family: 'Arial', sans-serif; 
 }
+
 #menu {
     width: 25%;
-    background-color: #f0f0f0;
-    padding: 10px;
+    background-color: honeydew;
+    padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px; 
+    margin-right: 10px; 
 }
+
 #canvasContainer {
     width: 75%;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px; 
 }
+
 canvas {
     border: 1px solid black;
     cursor: crosshair;
+    background-color: white;
+    border-radius: 8px; 
 }
+
 .color-input, .shape-list {
     margin: 10px 0;
 }
+
+.color-input label,
+.shape-list h4 {
+    font-weight: bold; 
+}
+
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px 0;
+    font-size: 16px;
+    background-color: #4CAF50; 
+    color: white; 
+    border: none;
+    border-radius: 4px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+    cursor: pointer;
+    transition: background-color 0.3s; 
+}
+
+button:hover {
+    background-color: #45a049; 
+}
+
+button:active {
+    background-color: #3e8e41; 
+}
+
 #drawingCanvas {
     border: 1px solid #000;
     cursor: crosshair;
 }
+
 #controls {
     margin-top: 20px;
+}
+
+input{
+    margin: 8px;
 }
