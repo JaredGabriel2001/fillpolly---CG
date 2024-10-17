@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fillpolly</title>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+</head>
+<body>
+    <div id="menu">
+        <h3>Configurações</h3>
+        <div class="color-input">
+            <label for="fillColor">Cor de Preenchimento:</label>
+            <input type="color" id="fillColor" value="#0000ff">
+        </div>
+        <div class="color-input">
+            <label for="borderColor">Cor da Borda:</label>
+            <input type="color" id="borderColor" value="#FFFF00">
+        </div>
+        <button id="endShapeButton">Encerrar Forma</button>
+        <button id="clearButton">Limpar Formas</button>
+        <div class="shape-list">
+            <h4>Formas Criadas</h4>
+            <ul id="shapeList"></ul>
+        </div>
+    </div>
+    <div id="canvasContainer">
+        <canvas id="drawingCanvas" width="800" height="600"></canvas>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

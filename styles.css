@@ -1,0 +1,32 @@
+body {
+    display: flex;
+    margin: 0;
+    height: 100vh;
+}
+#menu {
+    width: 25%;
+    background-color: #f0f0f0;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+#canvasContainer {
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+canvas {
+    border: 1px solid black;
+    cursor: crosshair;
+}
+.color-input, .shape-list {
+    margin: 10px 0;
+}
+#drawingCanvas {
+    border: 1px solid #000;
+    cursor: crosshair;
+}
+#controls {
+    margin-top: 20px;
+}
