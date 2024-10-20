@@ -71,7 +71,7 @@ function createShape() {
         return;
     }
     currentPoints.push(currentPoints[0]);
-    var newShape = new Shape(__spreadArray([], currentPoints, true), "#0000ff", defaultBorderColor);
+    var newShape = new Shape(__spreadArray([], currentPoints, true), "#ffffff", defaultBorderColor);
     shapes.push(newShape);
     currentPoints = [];
     updateShapeList();

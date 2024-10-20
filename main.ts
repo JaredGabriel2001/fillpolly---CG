@@ -1,21 +1,18 @@
-// Classe para representar um ponto 2D
+//ponto 2D
 class Point {
     constructor(public x: number, public y: number) {}
 }
 
-// Classe para representar uma forma geométrica
+//forma geométrica
 class Shape {
     constructor(public vertices: Point[], public fillColor: string, public borderColor: string) {}
 }
 
-// Variáveis globais
 let currentPoints: Point[] = []; // Pontos da forma atual
 let shapes: Shape[] = []; // Lista de formas criadas
-let selectedShapeIndex: number | null = null; // Índice da forma selecionada
+let selectedShapeIndex: number | null = null; // usada para funçao q limpa formas da tela
 
-const defaultBorderColor = "#FFFF00"; // Cor da borda padrão
-
-// Seleciona elementos HTML
+const defaultBorderColor = "#FFFF00"; 
 const canvas = document.getElementById("drawingCanvas") as HTMLCanvasElement;
 const context = canvas.getContext("2d")!;
 const clearButton = document.getElementById("clearButton") as HTMLButtonElement;
@@ -57,7 +54,7 @@ function createShape() {
         return;
     }
     currentPoints.push(currentPoints[0]);
-    const newShape = new Shape([...currentPoints], "#0000ff", defaultBorderColor);
+    const newShape = new Shape([...currentPoints], "#ffffff", defaultBorderColor);
     shapes.push(newShape);
     currentPoints = [];
     updateShapeList();
