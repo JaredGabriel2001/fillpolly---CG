@@ -53,31 +53,30 @@ function createShape() {
         alert("A forma deve ter pelo menos três pontos.");
         return;
     }
-    currentPoints.push(currentPoints[0]);
-    const newShape = new Shape([...currentPoints], "#ffffff", defaultBorderColor);
+    currentPoints.push(currentPoints[0]); //conecta o ultimo ponto atual ao primeiro
+    const newShape = new Shape([...currentPoints], "#ffffff", defaultBorderColor); //adiciona o poligono atual na lista de poligonos criados
     shapes.push(newShape);
-    currentPoints = [];
-    updateShapeList();
-    drawAllShapes();
+    currentPoints = []; //limpa para a criação de novos poligono
+    updateShapeList();  //exibe na tela o novo poligono
+    drawAllShapes(); //redesenha todas as formas criadas atualmente
 }
 
-// Função para capturar cliques na tela e adicionar pontos ao polígono atual
 canvas.addEventListener("click", (event: MouseEvent) => {
-    const rect = canvas.getBoundingClientRect();
-    const x = event.clientX - rect.left;
+    const rect = canvas.getBoundingClientRect(); //retorna o tamanho e a posição do canvas em relação ao viewport
+    const x = event.clientX - rect.left; //event.clientX é a coordenada x do clique do usuário relativa à janela do navegador, que subtrai a distância entre o lado esquerdo da janela e o lado esquerdo do canvas
     const y = event.clientY - rect.top;
-    currentPoints.push(new Point(x, y));
-    drawAllShapes();
+    currentPoints.push(new Point(x, y)); //adiciona o ponto criado à lista de pontos
+    drawAllShapes(); //redesenha todas as formas criadas atualmente
 });
 
 // encerrar forma geometrica, ligar ponto inicial ao final
 endShapeButton.addEventListener("click", () => {
-    createShape();
+    createShape(); //cria o poligono atual para ser adicionada à lista de poligonos
 });
 
 // limpar o canvas, retirar todas as formas geometricas desenhadas 
 clearButton.addEventListener("click", () => {
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height); //context.clearRect(x, y, width, height):
     currentPoints = [];
     shapes = [];
     selectedShapeIndex = null;
@@ -91,14 +90,14 @@ function fillPoly(context: CanvasRenderingContext2D, vertices: Point[], fillColo
         return;
     }
 
-    let minY = Infinity, maxY = -Infinity; 
-    for (const vertex of vertices) {            //calculando limites do poligono
-        if (vertex.y < minY) minY = vertex.y;
-        if (vertex.y > maxY) maxY = vertex.y;
+    let minY = Infinity, maxY = -Infinity;      //define os extremos do poligono
+    for (const vertex of vertices) {            //itera por cada vértice no array vertices
+        if (vertex.y < minY) minY = vertex.y;   //atualiza minY se o y do vértice atual for menor
+        if (vertex.y > maxY) maxY = vertex.y;   //atualiza maxY se o y do vértice atual for maior
     }
 
     //pintar linha por linha 
-    for (let y = Math.ceil(minY); y <= Math.floor(maxY); y++) {
+    for (let y = Math.ceil(minY); y <= Math.floor(maxY); y++) { //varre o polígono de minY até maxY e calcula as interseções dos segmentos do polígono com cada linha y
         let intersections: number[] = [];    //array que armazena as interseções dos segmentos do polígono com a linha y atual.
         for (let i = 0, len = vertices.length; i < len; i++) {
             const v1 = vertices[i];
@@ -132,43 +131,44 @@ function fillPoly(context: CanvasRenderingContext2D, vertices: Point[], fillColo
     }
 }
 
+//atualiza a lista de formas exibidas na interface do usuário
 function updateShapeList() {
     shapeList.innerHTML = ""; // Limpa a lista atual
     shapes.forEach((shape, index) => {
         const listItem = document.createElement("li");
 
-        const shapeInfo = document.createElement("span");
+        const shapeInfo = document.createElement("span"); //cria um span para o nome dos poligonos
         shapeInfo.textContent = `Forma ${index + 1}: `;
 
-        const fillColorInput = document.createElement("input");
+        const fillColorInput = document.createElement("input"); //cria um input de cor para cada poligono inserido
         fillColorInput.type = "color";
         fillColorInput.value = shape.fillColor;
-        fillColorInput.addEventListener("input", () => {
+        fillColorInput.addEventListener("input", () => { //possibilita ao usuario mudar a cor de preenchimento de cada poligono de forma individual 
             shape.fillColor = fillColorInput.value;
             drawAllShapes();
         });
 
-        const borderColorInput = document.createElement("input");
+        const borderColorInput = document.createElement("input"); //cria um input para alterar as arestas/bordas do poligono
         borderColorInput.type = "color";
         borderColorInput.value = shape.borderColor;
-        borderColorInput.addEventListener("input", () => {
+        borderColorInput.addEventListener("input", () => { //possibilita ao usuario mudar a cor de borda de cada poligono de forma individual 
             shape.borderColor = borderColorInput.value;
             drawAllShapes();
         });
 
-        const deleteButton = document.createElement("button");
+        const deleteButton = document.createElement("button"); //cria um botao para deletar os poligonos de fomra individual
         deleteButton.textContent = "Excluir";
-        deleteButton.addEventListener("click", () => {
+        deleteButton.addEventListener("click", () => { //ao clicar no botao, a forma/poligono é excluida da lista de poligonos e a list é atualizada
             shapes.splice(index, 1);
             updateShapeList();
             drawAllShapes();
         });
 
-        listItem.appendChild(shapeInfo);
-        listItem.appendChild(fillColorInput);
-        listItem.appendChild(borderColorInput);
-        listItem.appendChild(deleteButton);
+        listItem.appendChild(shapeInfo);         //é um elemento span que contém o texto com o índice e a descrição da forma (por exemplo, "Forma 1:")
+        listItem.appendChild(fillColorInput);    //é um elemento input do tipo color que permite ao usuário selecionar a cor do preenchimento da forma
+        listItem.appendChild(borderColorInput);  //é um elemento input do tipo color que permite ao usuário selecionar a cor da borda da forma
+        listItem.appendChild(deleteButton);      //é um elemento button que permite ao usuário excluir a forma
         
-        shapeList.appendChild(listItem);
+        shapeList.appendChild(listItem); //Adiciona o item da lista (listItem), que agora contém todas as informações e controles para uma forma, ao elemento shapeList
     });
 }
