@@ -108,7 +108,6 @@ function fillPoly(context, vertices, fillColor, borderColor) {
         if (vertex.y > maxY)
             maxY = vertex.y; //atualiza maxY se o y do vértice atual for maior
     }
-    //pintar linha por linha 
     for (var y = Math.ceil(minY); y <= Math.floor(maxY); y++) { //varre o polígono de minY até maxY e calcula as interseções dos segmentos do polígono com cada linha y
         var intersections = []; //array que armazena as interseções dos segmentos do polígono com a linha y atual.
         for (var i = 0, len = vertices.length; i < len; i++) {
@@ -120,12 +119,22 @@ function fillPoly(context, vertices, fillColor, borderColor) {
             }
         }
         intersections.sort(function (a, b) { return a - b; }); //ordenando da esquerda para direita para garantir o preenchimento correto
+        //pintar pixel a pixel
         context.fillStyle = fillColor;
         for (var i = 0; i < intersections.length; i += 2) {
             var xStart = Math.ceil(intersections[i]);
             var xEnd = Math.floor(intersections[i + 1]);
-            context.fillRect(xStart, y, xEnd - xStart, 1); //context.fillRect(x, y, width, height), ou seja, a linha percorrida
+            for (var k = xStart; k < xEnd; k++) {
+                context.fillRect(k, y, 1, 1); //context.fillRect(x, y, width, height), ou seja, pintando pixel a pixel
+            }
         }
+        //metodo de pintar linha a linha
+        //context.fillStyle = fillColor;
+        //for (let i = 0; i < intersections.length; i += 2) {
+        //    const xStart = Math.ceil(intersections[i]);
+        //   const xEnd = Math.floor(intersections[i + 1]);
+        //    context.fillRect(xStart, y, xEnd - xStart, 1); //context.fillRect(x, y, width, height), ou seja, a linha percorrida
+        //}
     }
     if (borderColor) {
         context.strokeStyle = borderColor;
